@@ -1,0 +1,118 @@
+{% include "header.html" %}
+
+<!-- HEADER -->
+<div class="header bg-primary pb-5">
+    <div class="container-fluid">
+        <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+                <h6 class="h2 text-white d-inline-block mb-0">TF - IDF</h6>
+                <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                    <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                        <li class="breadcrumb-item"><a href="/dashboard"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">TF - IDF</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  ======================= CONTENT ======================= -->
+<div class="container-fluid mt--6">
+
+    <!--  ======================= STATUS INFO ======================= -->
+    <div class="row" style="margin-top: 20px;">
+
+        <!--  ======================= STATUS DATA BERSIH ======================= -->
+        <div class="col-xl-12">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="card-title text-uppercase text-muted mb-0">TF - IDF</h1>
+                            <p>Informasi Tentang TF - IDF</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <!-- ================ Notifikasi ================= -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert {{ category }}" style="margin-top:auto;">
+                    <span class="closebtn">&times;</span>
+                    <strong style="font-size: 20px;">{{ message }}</strong>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <div class="card">
+                    <!-- Card header -->
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h2 class="mb-0">TF - IDF</h2>
+                            </div>
+                            <div class="col text-right">
+                                <a href="/prosesBersih" class="btn btn-sm btn-warning" style="font-size: 18px;">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Proses</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-1">
+                        <hr class="my-2">
+                        <br>
+                        <table id="tableID" style="width:100%; margin-top:20px;">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Sebelum</th>
+                                    <th>Sesudah</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rs in data %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ rs.0 }}</td>
+                                    <td>{{ rs.1 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================ SCRIPT TABLE ================ -->
+    <script>
+        /* Initialization of datatable */
+        $(document).ready(function () {
+            $('#tableID').DataTable({});
+        }); 
+    </script>
+
+    <!-- ================ SCRIPT ALERT ================ -->
+    <script>
+        var close = document.getElementsByClassName("closebtn");
+        var i;
+
+        for (i = 0; i < close.length; i++) {
+            close[i].onclick = function () {
+                var div = this.parentElement;
+                div.style.opacity = "0";
+                setTimeout(function () { div.style.display = "none"; }, 600);
+            }
+        }
+    </script>
+
+    {% include "footer.html" %}

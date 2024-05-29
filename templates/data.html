@@ -1,0 +1,225 @@
+{% include "header.html" %}
+
+<!-- HEADER -->
+<div class="header bg-primary pb-5">
+    <div class="container-fluid">
+        <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+                <h6 class="h2 text-white d-inline-block mb-0">Data</h6>
+                <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                    <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                        <li class="breadcrumb-item"><a href="/dashboard"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Data</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  ======================= CONTENT ======================= -->
+<div class="container-fluid mt--6">
+
+    <!--  ======================= STATUS INFO ======================= -->
+    <div class="row" style="margin-top: 20px;">
+
+        <!--  ======================= STATUS DATA TWEET ======================= -->
+        <div class="col-xl-6 col-md-6">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Total Data Tweet</h5>
+                            <span class="h2 font-weight-bold mb-0">{{ total }}</span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-blue text-white rounded-circle shadow">
+                                <i class="bi bi-database-fill"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3 mb-0 text-sm">
+                            <a href="/data_tweet" class="btn btn-sm btn-default">Lihat</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  ======================= STATUS DATA BERSIH ======================= -->
+        <div class="col-xl-6 col-md-6">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="card-title text-uppercase text-muted mt-2">Data Bersih</h1>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-gray text-white rounded-circle shadow">
+                                <i class="bi bi-magic"></i>
+                            </div>
+                        </div>
+                        <div class="mt-0 mb-0 text-sm">
+                            <a href="/data_bersih" class="btn btn-sm btn-default">Lihat</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h1 class="mb-0">Informasi Data</h1>
+                        </div>
+                        <div class="col text-right">
+                            <button class="btn btn-sm btn-default" style="padding: 5px 10px; border-radius:50px;"
+                                id="BtnCSV">
+                                <i class="bi bi-cloud-arrow-up-fill" style="font-size: 15px; ">
+                                    <span style="font-style: normal;">Import CSV</span>
+                                </i>
+                            </button>
+                            <button class="btn btn-sm btn-default" style="padding: 5px 10px; border-radius:50px;"
+                                id="BtnTambah">
+                                <i class="bi bi-plus" style="font-size: 15px;">
+                                    <span style="font-style: normal;">Tambah Data</span>
+                                </i>
+                            </button>
+                            <!-- <a href="/cekData" class="btn btn-sm btn-info"
+                                style="padding: 5px 10px; border-radius:50px; color:white;">
+                                <i class="bi-check2-square" style="font-size: 15px;">
+                                    <span style="font-style: normal;">Cek Data</span>
+                                </i>
+                            </a> -->
+                            <a href="/clearData" class="btn btn-sm btn-danger"
+                                style="padding: 5px 10px; border-radius:50px; color:white;"
+                                onclick="return confirm('Yakin Ingin Menghapus Database ?')">
+                                <i class="bi bi-trash" style="font-size: 15px;">
+                                    <span style="font-style: normal;">Clear Data</span>
+                                </i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================ Notifikasi ================= -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert {{ category }}">
+        <span class="closebtn">&times;</span>
+        <strong style="font-size: 20px;">{{ message }}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+</div>
+
+<!-- ================ Import CSV ================= -->
+<div id="importCSV" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content" style="width:50%;">
+        <span class="clsModal text-right">&times;</span>
+        <h1>Import CSV</h1>
+        <form action="/uploadFile" method="POST" enctype="multipart/form-data">
+            <label for="images" class="drop-container" id="dropcontainer">
+                <span class="drop-title">Drop files here</span>
+                or
+                <input type="file" id="file" name="file" required>
+            </label>
+            <div class="col text-center">
+                <input type="submit" value="Submit" class="btn btn-sm btn-success"
+                    style="padding: 5px 10px; border-radius:10px; font-size:15px; margin-top:10px">
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ================ Tambah Data ================= -->
+<div id="tambahData" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content" style="width:50%;">
+        <span class="tutup text-right" style="cursor: pointer;">&times;</span>
+        <h1>Tambah Data</h1>
+        <form action="/tambahData" method="POST">
+            <input type="text" name="full_text" id="full_text">
+            <div class="col text-center">
+                <input type="submit" value="Tambah" class="btn btn-sm btn-success"
+                    style="padding: 5px 10px; border-radius:10px; font-size:15px; margin-top:10px">
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ================ SCRIPT IMPORT CSV ================ -->
+<script>
+    // Tambah Data
+    var modal = document.getElementById("importCSV");
+    var btn = document.getElementById("BtnCSV");
+    var span = document.getElementsByClassName("clsModal")[0];
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+<!-- ================ SCRIPT TAMBAH DATA ================ -->
+<script>
+    // Tambah Data
+    var mdlTambah = document.getElementById("tambahData");
+    var btnTambah = document.getElementById("BtnTambah");
+    var tutup = document.getElementsByClassName("tutup")[0];
+    btnTambah.onclick = function () {
+        mdlTambah.style.display = "block";
+    }
+    tutup.onclick = function () {
+        mdlTambah.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == mdlTambah) {
+            mdlTambah.style.display = "none";
+        }
+    }
+</script>
+
+<!-- ================ SCRIPT TABLE ================ -->
+<script>
+    /* Initialization of datatable */
+    $(document).ready(function () {
+        $('#tableID').DataTable({});
+    }); 
+</script>
+
+<!-- ================ SCRIPT ALERT ================ -->
+<script>
+    var close = document.getElementsByClassName("closebtn");
+    var i;
+
+    for (i = 0; i < close.length; i++) {
+        close[i].onclick = function () {
+            var div = this.parentElement;
+            div.style.opacity = "0";
+            setTimeout(function () { div.style.display = "none"; }, 600);
+        }
+    }
+</script>
+
+{% include "footer.html" %}

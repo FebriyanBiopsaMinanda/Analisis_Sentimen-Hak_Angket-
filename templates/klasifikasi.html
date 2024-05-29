@@ -1,0 +1,151 @@
+{% include "header.html" %}
+
+<!-- HEADER -->
+<div class="header bg-primary">
+    <div class="container-fluid">
+        <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+                <h6 class="h2 text-white d-inline-block mb-0">Klasifikasi</h6>
+                <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                    <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                        <li class="breadcrumb-item"><a href="/dashboard"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Klasifikasi</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  ======================= CONTENT ======================= -->
+<div class="container-fluid mt--10">
+    <div class="row" style="margin-top: 20px;">
+
+        <div class="row">
+
+            <!-- ======================= HASIL KLASIFIKASI ======================= -->
+            <div class="col-xl-8">
+                <!-- ================ Notifikasi ================= -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert {{ category }}" style="margin-top:auto;">
+                    <span class="closebtn">&times;</span>
+                    <strong style="font-size: 20px;">{{ message }}</strong>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <div class="card">
+                    <!-- Card header -->
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h2 class="mb-0">Klasifikasi</h2>
+                            </div>
+                            <div class="col text-right">
+                                <a href="/prosesKlasifikasi" class="btn btn-sm btn-warning" style="font-size: 18px;">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Proses</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-1">
+                        <hr class="my-2">
+                        <br>
+                        <table id="tableID" style="width:100%; margin-top:20px;">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tweet</th>
+                                    <th>Sentimen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rs in data %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ rs.0 }}</td>
+                                    <td>{{ rs.1 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4">
+                <!-- ======================= BAR PERBANDINGAN ======================= -->
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">Bar Perbandingan</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-bar">
+                        <div class="barcontainer">
+                            <div class="bar success" style="height:{{persen_positif}}%">
+                            </div>
+                        </div>
+                        <div class="barcontainer">
+                            <div class="bar danger" style="height:{{persen_negatif}}%">
+                            </div>
+                        </div>
+                        <div class="info-bar">
+                            <table>
+                                <tr>
+                                    <td><span class="label other"></span></td>
+                                    <td><span>Total</span></td>
+                                    <td>:</td>
+                                    <td><span>{{total}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="label success"></span></td>
+                                    <td><span>Positif</span></td>
+                                    <td>:</td>
+                                    <td><span>{{positif}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="label danger"></span></td>
+                                    <td><span>Negatif</span></td>
+                                    <td>:</td>
+                                    <td><span>{{negatif}}</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================ SCRIPT TABLE ================ -->
+<script>
+    /* Initialization of datatable */
+    $(document).ready(function () {
+        $('#tableID').DataTable({});
+    }); 
+</script>
+
+<!-- ================ SCRIPT ALERT ================ -->
+<script>
+    var close = document.getElementsByClassName("closebtn");
+    var i;
+
+    for (i = 0; i < close.length; i++) {
+        close[i].onclick = function () {
+            var div = this.parentElement;
+            div.style.opacity = "0";
+            setTimeout(function () { div.style.display = "none"; }, 600);
+        }
+    }
+</script>
+
+
+{% include "footer.html" %}
