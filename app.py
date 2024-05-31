@@ -12,6 +12,13 @@ from nltk.corpus import stopwords
 import re
 import string
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+
+# Metode
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
@@ -99,6 +106,41 @@ def processSentiments() :
         cur.execute("INSERT INTO sentiment (clean_text, sentimen) VALUES (%s,%s)", (txt, sentimen))
         mysql.connection.commit()
 
+def processTfIdf():
+    # Get Data From Database
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM sentiment")
+    data = cur.fetchall()
+    
+    df = pd.DataFrame(data, columns=['clean_text', 'sentimen'])
+    clean_text = df['clean_text']
+    sentimen = df['sentimen']
+
+    # Proses TF-IDF
+    tfidf_vectorizer = TfidfVectorizer(max_features=1000, stop_words=None)
+    tfidf_matrix = tfidf_vectorizer.fit_transform(clean_text)
+    tfidf_data = tfidf_matrix.toarray()
+    tfidf_df = pd.DataFrame(tfidf_data, columns=tfidf_vectorizer.get_feature_names_out())
+    
+    return tfidf_df, sentimen
+    
+
+def TrainTestSplit():
+    tfidf_df, sentimen = processTfIdf()
+    
+    cur = mysql.connection.cursor()
+    
+    cur.execute("SELECT * FROM split")
+    split = cur.fetchall()
+    test_number = (split[0][1] / 100)
+
+    X = tfidf_df.values
+    y = sentimen 
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_number, random_state=42)
+    
+    return X_train, X_test, y_train, y_test
+    
 
 # ========================= DASHBOARD =========================
 @app.route("/")
@@ -313,21 +355,106 @@ def prosesKlasifikasi():
     total = len(data)
     if total != 0 :
         processSentiments()
+        tfidf_df, sentimen = processTfIdf()
         flash("Proses Selesai", 'success')
         return redirect(url_for('klasifikasi'))
     else :
         flash("Opss.. Database Kosong", 'warning')
         return redirect(url_for('klasifikasi'))
-    
-# ========================= TF - IDF =========================
-@app.route("/tfidf")
-def tfidf():
-    return render_template("tfidf.html")
 
 # ========================= HASIL =========================
 @app.route("/hasil")
 def hasil():
     return render_template("hasil.html")
+
+# ========================= Naive Bayes =========================
+@app.route("/nvbayes")
+def nvbayes():
+    X_train, X_test, y_train, y_test = TrainTestSplit()
+    
+    nb_model = MultinomialNB()
+    nb_model.fit(X_train, y_train)
+    y_pred_nb = nb_model.predict(X_test)
+    accuracy_nb = accuracy_score(y_test, y_pred_nb)
+    
+    akurasi = f"{(accuracy_nb*100):.0f}"
+    akurasi = int(akurasi)
+    selisih_akurasi = 100 - akurasi
+    
+    accuracy_nb = f"{(accuracy_nb*100):.0f} %"
+    
+    Train = len(X_train)
+    Test = len(X_test)
+    
+    label_mapping = {"Positif": 1, "Negatif": 0}
+    
+    # Testing
+    data_numeric_test = [label_mapping[label] for label in y_test]
+    jumlah_positif_test = sum([1 for value in data_numeric_test if value == 1])
+    jumlah_negatif_test = sum([1 for value in data_numeric_test if value == 0])
+    
+    # Naive Bayes
+    data_numeric_nb = [label_mapping[label] for label in y_pred_nb]
+    jumlah_positif_nb = sum([1 for value in data_numeric_nb if value == 1])
+    jumlah_negatif_nb = sum([1 for value in data_numeric_nb if value == 0])
+    
+    #Selisih
+    selisih_positif = abs(jumlah_positif_test - jumlah_positif_nb)
+    selisih_negatif = abs(jumlah_negatif_test - jumlah_negatif_nb)
+    
+    return render_template("nvbayes.html", accuracy_nb = accuracy_nb, train = Train, test = Test,
+                           jumlah_positif_test = jumlah_positif_test, jumlah_negatif_test = jumlah_negatif_test,
+                           jumlah_positif_nb = jumlah_positif_nb, jumlah_negatif_nb = jumlah_negatif_nb,
+                           selisih_positif = selisih_positif, selisih_negatif = selisih_negatif,
+                           akurasi = akurasi, selisih_akurasi = selisih_akurasi)
+
+# ========================= Decision  =========================
+@app.route("/dctree")
+def dctree():
+    X_train, X_test, y_train, y_test = TrainTestSplit()
+    
+    # Inisialisasi model Decision Tree
+    dt_model = DecisionTreeClassifier(random_state=42)
+
+    # Latih model Decision Tree menggunakan data training
+    dt_model.fit(X_train, y_train)
+
+    # Lakukan prediksi pada data testing
+    y_pred_dt = dt_model.predict(X_test)
+
+    # Evaluasi performa model Decision Tree
+    accuracy_dt = accuracy_score(y_test, y_pred_dt)
+    
+    akurasi = f"{(accuracy_dt*100):.0f}"
+    akurasi = int(akurasi)
+    selisih_akurasi = 100 - akurasi
+    
+    accuracy_dt = f"{(accuracy_dt*100):.0f} %"
+    
+    Train = len(X_train)
+    Test = len(X_test)
+    
+    label_mapping = {"Positif": 1, "Negatif": 0}
+    
+    # Testing
+    data_numeric_test = [label_mapping[label] for label in y_test]
+    jumlah_positif_test = sum([1 for value in data_numeric_test if value == 1])
+    jumlah_negatif_test = sum([1 for value in data_numeric_test if value == 0])
+    
+    # Naive Bayes
+    data_numeric_dt = [label_mapping[label] for label in y_pred_dt]
+    jumlah_positif_dt = sum([1 for value in data_numeric_dt if value == 1])
+    jumlah_negatif_dt = sum([1 for value in data_numeric_dt if value == 0])
+    
+    #Selisih
+    selisih_positif = abs(jumlah_positif_test - jumlah_positif_dt)
+    selisih_negatif = abs(jumlah_negatif_test - jumlah_negatif_dt)
+    
+    return render_template("dctree.html", accuracy_dt = accuracy_dt, train = Train, test = Test,
+                           jumlah_positif_test = jumlah_positif_test, jumlah_negatif_test = jumlah_negatif_test,
+                           jumlah_positif_dt = jumlah_positif_dt, jumlah_negatif_dt = jumlah_negatif_dt,
+                           selisih_positif = selisih_positif, selisih_negatif = selisih_negatif,
+                           akurasi = akurasi, selisih_akurasi = selisih_akurasi)
 
 if __name__ == "__main__":
     app.run(debug = True)

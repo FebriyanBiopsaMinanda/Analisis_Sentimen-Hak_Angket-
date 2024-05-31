@@ -1,3 +1,58 @@
 {% include "header.html" %}
 
-{% include "footer.html" %}
+<!-- HEADER -->
+<div class="header bg-primary pb-5">
+    <div class="container-fluid">
+        <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+                <h6 class="h2 text-white d-inline-block mb-0">Hasil Analisis</h6>
+                <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                    <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                        <li class="breadcrumb-item"><a href="/dashboard"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Hasil Analisis</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  ======================= CONTENT ======================= -->
+<div class="container-fluid mt--6">
+
+    <!--  ======================= Hasil Analisis ======================= -->
+    <div class="row" style="margin-top: 20px;">
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <!-- Card header -->
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h1 class="mb-0">Hasil Analisis</h1>
+                            </div>
+                            <div class="col text-right">
+                                <a href="/nvbayes" class="btn btn-sm btn-default"
+                                    style="padding: 5px 10px; border-radius:50px;" id="BtnCSV">
+                                    <i class="bi bi-command" style="font-size: 15px; color:white;">
+                                        <span style="font-style: normal;">Naive Bayes</span>
+                                    </i>
+                                </a>
+                                <a href="/dctree" class="btn btn-sm btn-default"
+                                    style="padding: 5px 10px; border-radius:50px;" id="BtnTambah">
+                                    <i class="bi bi-command " style="font-size: 15px; color: white;">
+                                        <span style="font-style: normal;">Desicion Tree</span>
+                                    </i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    {% include "footer.html" %}

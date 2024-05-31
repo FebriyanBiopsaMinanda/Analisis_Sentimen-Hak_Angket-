@@ -1,0 +1,206 @@
+{% include "header.html" %}
+
+<!-- HEADER -->
+<div class="header bg-primary pb-5">
+    <div class="container-fluid">
+        <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+                <h6 class="h2 text-white d-inline-block mb-0">Hasil Analisis</h6>
+                <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                    <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                        <li class="breadcrumb-item"><a href="/dashboard"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="/hasil">Hasil Analisis</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Naive Bayes</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  ======================= CONTENT ======================= -->
+<div class="container-fluid mt--6">
+    <div class="row" style="margin-top: 20px;">
+
+        <!--  ======================= Hasil Analisis ======================= -->
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <!-- Card header -->
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h1 class="mb-0">Hasil Analisis</h1>
+                            </div>
+                            <div class="col text-right">
+                                <a href="/nvbayes" class="btn btn-sm btn-default"
+                                    style="padding: 5px 10px; border-radius:50px;" id="BtnCSV">
+                                    <i class="bi bi-command" style="font-size: 15px; color:white;">
+                                        <span style="font-style: normal;">Naive Bayes</span>
+                                    </i>
+                                </a>
+                                <a href="/dctree" class="btn btn-sm btn-default"
+                                    style="padding: 5px 10px; border-radius:50px;" id="BtnTambah">
+                                    <i class="bi bi-command " style="font-size: 15px; color: white;">
+                                        <span style="font-style: normal;">Desicion Tree</span>
+                                    </i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  ======================= Hasil Akurasi ======================= -->
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <!-- Card header -->
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h1 class="mb-0">Akurasi Naive Bayes : {{ accuracy_nb }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  ======================= Tabel Akurasi ======================= -->
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-xxs font-weight-bolder opacity-7"></th>
+                                    <th class="text-center text-xxs font-weight-bolder opacity-7"
+                                        style="font-size: 17px;">
+                                        Positif</th>
+                                    <th class="text-center text-xxs font-weight-bolder opacity-7"
+                                        style="font-size: 17px;">
+                                        Negatif</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="align-middle text-center">Klasifikasi</td>
+                                    <td class="align-middle text-center">{{ jumlah_positif_test }}</td>
+                                    <td class="align-middle text-center">{{ jumlah_negatif_test }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle text-center">Naive Bayes</td>
+                                    <td class="align-middle text-center">{{ jumlah_positif_nb }}</td>
+                                    <td class="align-middle text-center">{{ jumlah_negatif_nb }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle text-center">Selisih</td>
+                                    <td class="align-middle text-center">{{ selisih_positif }}</td>
+                                    <td class="align-middle text-center">{{ selisih_negatif }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  ======================= Visualisasi Sentimen Naive Bayes ======================= -->
+        <div class="row">
+            <div class="col-xl-6 col-md-6">
+                <div class="card card-stats">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h1 class="card-title text-uppercase text-muted mt-2">Visualisasi Sentimen Naive
+                                    Bayes</h1>
+                            </div>
+                            <div class="mt-0 mb-0 text-sm">
+                                <input type="hidden" id="Train" value="{{ train }}">
+                                <input type="hidden" id="Test" value="{{ test }}">
+                                <canvas id="ChartVisualisasi" style="width:100%;max-width:600px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  ======================= Akurasi Sentimen Naive Bayes ======================= -->
+            <div class="col-xl-6 col-md-6">
+                <div class="card card-stats">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h1 class="card-title text-uppercase text-muted mt-2">Akurasi Sentimen Naive Bayes
+                                </h1>
+                            </div>
+                            <div class="mt-0 mb-0 text-sm">
+                                <input type="hidden" id="akurasi" value="{{ akurasi }}">
+                                <input type="hidden" id="selisih_akurasi" value="{{ selisih_akurasi }}">
+                                <canvas id="ChartAkurasi" style="width:100%;max-width:600px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<!--  ======================= Chart Visualisasi ======================= -->
+<script>
+    var Train = document.getElementById("Train").value
+    var Test = document.getElementById("Test").value
+    const xValues = ["Train", "Test"];
+    const yValues = [Train, Test];
+    const barColors = [
+        "#172b4d",
+        "#fb6340",
+    ];
+
+    new Chart("ChartVisualisasi", {
+        type: "doughnut",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+        }
+    });
+</script>
+
+<!--  ======================= Chart Akurasi ======================= -->
+<script>
+    var akurasi = document.getElementById("akurasi").value
+    var selisih = document.getElementById("selisih_akurasi").value
+    const label = ["Sesuai", "Tidak Sesuai"];
+    const set = [akurasi, selisih];
+    const color = [
+        "#2dce89",
+        "#f5365c",
+    ];
+
+    new Chart("ChartAkurasi", {
+        type: "pie",
+        data: {
+            labels: label,
+            datasets: [{
+                backgroundColor: color,
+                data: set
+            }]
+        },
+        options: {
+        }
+    });
+</script>
+
+{% include "footer.html" %}

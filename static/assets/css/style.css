@@ -487,26 +487,16 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .label {
-  color: white;
+  color: #adb5bd;
   padding: 8px;
   font-family: Arial;
 }
 .success {
-  background-color: #04aa6d;
-} /* Green */
-.info {
-  background-color: #2196f3;
-} /* Blue */
-.warning {
-  background-color: #ff9800;
-} /* Orange */
+  background-color: #2dce89;
+} 
 .danger {
-  background-color: #f44336;
-} /* Red */
-.other {
-  background-color: #e7e7e7;
-  color: black;
-} /* Gray */
+  background-color: #f5365c;
+}
 
 .container-bar {
   width: 350px;
@@ -515,7 +505,7 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .barcontainer {
-  background-color: gainsboro;
+  background-color: #adb5bd;
   position: relative;
   transform: translateY(-50%);
   top: 50%;
@@ -547,11 +537,11 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .bar.success {
-  background-color: #04aa6d;
+  background-color: #2dce89;
 }
 
 .bar.danger {
-  background-color: #f44336;
+  background-color: #f5365c;
 }
 
 @keyframes grow {
@@ -567,10 +557,10 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .label.success {
-  background-color: #04aa6d;
+  background-color: #2dce89;
 }
 .label.danger {
-  background-color: #f44336;
+  background-color: #f5365c;
 }
 .label.other {
   background-color: gainsboro;
