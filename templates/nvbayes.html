@@ -54,13 +54,28 @@
 
         <!--  ======================= Hasil Akurasi ======================= -->
         <div class="row">
-            <div class="col">
+            <!--  ======================= Hasil Akurasi Naive Bayes TF - IDF ======================= -->
+            <div class="col-xl-6 col-md-6">
                 <div class="card">
                     <!-- Card header -->
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h1 class="mb-0">Akurasi Naive Bayes : {{ accuracy_nb }}</h1>
+                                <h1 class="mb-0">Akurasi Naive Bayes TF - IDF : {{ accuracy_nb_tfidf }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  ======================= Hasil Akurasi Naive Bayes N - Gram  ======================= -->
+            <div class="col-xl-6 col-md-6">
+                <div class="card">
+                    <!-- Card header -->
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h1 class="mb-0">Akurasi Naive Bayes N - Gram : {{ accuracy_nb_ngram }}</h1>
                             </div>
                         </div>
                     </div>
@@ -70,7 +85,8 @@
 
         <!--  ======================= Tabel Akurasi ======================= -->
         <div class="row">
-            <div class="col">
+            <!--  ======================= Tabel Akurasi Naive Bayes TF - IDF ======================= -->
+            <div class="col-xl-6 col-md-6">
                 <div class="card">
                     <div class="table-responsive">
                         <table class="table align-items-center mb-0">
@@ -88,18 +104,54 @@
                             <tbody>
                                 <tr>
                                     <td class="align-middle text-center">Klasifikasi</td>
-                                    <td class="align-middle text-center">{{ jumlah_positif_test }}</td>
-                                    <td class="align-middle text-center">{{ jumlah_negatif_test }}</td>
+                                    <td class="align-middle text-center">{{ jumlah_positif_test_tfidf }}</td>
+                                    <td class="align-middle text-center">{{ jumlah_negatif_test_tfidf }}</td>
                                 </tr>
                                 <tr>
                                     <td class="align-middle text-center">Naive Bayes</td>
-                                    <td class="align-middle text-center">{{ jumlah_positif_nb }}</td>
-                                    <td class="align-middle text-center">{{ jumlah_negatif_nb }}</td>
+                                    <td class="align-middle text-center">{{ jumlah_positif_nb_tfidf }}</td>
+                                    <td class="align-middle text-center">{{ jumlah_negatif_nb_tfidf }}</td>
                                 </tr>
                                 <tr>
                                     <td class="align-middle text-center">Selisih</td>
-                                    <td class="align-middle text-center">{{ selisih_positif }}</td>
-                                    <td class="align-middle text-center">{{ selisih_negatif }}</td>
+                                    <td class="align-middle text-center">{{ selisih_positif_tfidf }}</td>
+                                    <td class="align-middle text-center">{{ selisih_negatif_tfidf }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!--  ======================= Tabel Akurasi Naive Bayes N - Gram ======================= -->
+            <div class="col-xl-6 col-md-6">
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-xxs font-weight-bolder opacity-7"></th>
+                                    <th class="text-center text-xxs font-weight-bolder opacity-7" style="font-size: 17px;">
+                                        Positif</th>
+                                    <th class="text-center text-xxs font-weight-bolder opacity-7" style="font-size: 17px;">
+                                        Negatif</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="align-middle text-center">Klasifikasi</td>
+                                    <td class="align-middle text-center">{{ jumlah_positif_test_ngram }}</td>
+                                    <td class="align-middle text-center">{{ jumlah_negatif_test_ngram }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle text-center">Naive Bayes</td>
+                                    <td class="align-middle text-center">{{ jumlah_positif_nb_ngram }}</td>
+                                    <td class="align-middle text-center">{{ jumlah_negatif_nb_ngram }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle text-center">Selisih</td>
+                                    <td class="align-middle text-center">{{ selisih_positif_ngram }}</td>
+                                    <td class="align-middle text-center">{{ selisih_negatif_ngram }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -108,39 +160,39 @@
             </div>
         </div>
 
-        <!--  ======================= Visualisasi Sentimen Naive Bayes ======================= -->
         <div class="row">
+            <!--  ======================= Akurasi Sentimen Naive Bayes TF IDF ======================= -->
             <div class="col-xl-6 col-md-6">
                 <div class="card card-stats">
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h1 class="card-title text-uppercase text-muted mt-2">Visualisasi Sentimen Naive
-                                    Bayes</h1>
+                                <h1 class="card-title text-uppercase text-muted mt-2">Akurasi Sentimen Naive Bayes TF IDF
+                                </h1>
                             </div>
                             <div class="mt-0 mb-0 text-sm">
-                                <input type="hidden" id="Train" value="{{ train }}">
-                                <input type="hidden" id="Test" value="{{ test }}">
-                                <canvas id="ChartVisualisasi" style="width:100%;max-width:600px"></canvas>
+                                <input type="hidden" id="akurasi_tfidf" value="{{ akurasi_tfidf }}">
+                                <input type="hidden" id="selisih_akurasi_tfidf" value="{{ selisih_akurasi_tfidf }}">
+                                <canvas id="ChartAkurasiTFIDF" style="width:100%;max-width:600px"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!--  ======================= Akurasi Sentimen Naive Bayes ======================= -->
+            <!--  ======================= Akurasi Sentimen Naive Bayes N GRAM ======================= -->
             <div class="col-xl-6 col-md-6">
                 <div class="card card-stats">
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h1 class="card-title text-uppercase text-muted mt-2">Akurasi Sentimen Naive Bayes
+                                <h1 class="card-title text-uppercase text-muted mt-2">Akurasi Sentimen Naive Bayes N GRAM
                                 </h1>
                             </div>
                             <div class="mt-0 mb-0 text-sm">
-                                <input type="hidden" id="akurasi" value="{{ akurasi }}">
-                                <input type="hidden" id="selisih_akurasi" value="{{ selisih_akurasi }}">
-                                <canvas id="ChartAkurasi" style="width:100%;max-width:600px"></canvas>
+                                <input type="hidden" id="akurasi_ngram" value="{{ akurasi_ngram  }}">
+                                <input type="hidden" id="selisih_akurasi_ngram" value="{{ selisih_akurasi_ngram  }}">
+                                <canvas id="ChartAkurasiNGRAM" style="width:100%;max-width:600px"></canvas>
                             </div>
                         </div>
                     </div>
@@ -153,35 +205,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
-<!--  ======================= Chart Visualisasi ======================= -->
+<!--  ======================= Chart Akurasi TF IDF ======================= -->
 <script>
-    var Train = document.getElementById("Train").value
-    var Test = document.getElementById("Test").value
-    const xValues = ["Train", "Test"];
-    const yValues = [Train, Test];
-    const barColors = [
-        "#172b4d",
-        "#fb6340",
-    ];
-
-    new Chart("ChartVisualisasi", {
-        type: "doughnut",
-        data: {
-            labels: xValues,
-            datasets: [{
-                backgroundColor: barColors,
-                data: yValues
-            }]
-        },
-        options: {
-        }
-    });
-</script>
-
-<!--  ======================= Chart Akurasi ======================= -->
-<script>
-    var akurasi = document.getElementById("akurasi").value
-    var selisih = document.getElementById("selisih_akurasi").value
+    var akurasi = document.getElementById("akurasi_tfidf").value
+    var selisih = document.getElementById("selisih_akurasi_tfidf").value
     const label = ["Sesuai", "Tidak Sesuai"];
     const set = [akurasi, selisih];
     const color = [
@@ -189,13 +216,38 @@
         "#f5365c",
     ];
 
-    new Chart("ChartAkurasi", {
+    new Chart("ChartAkurasiTFIDF", {
         type: "pie",
         data: {
             labels: label,
             datasets: [{
                 backgroundColor: color,
                 data: set
+            }]
+        },
+        options: {
+        }
+    });
+</script>
+
+<!--  ======================= Chart Akurasi N GRAM ======================= -->
+<script>
+    var akurasi_ngram = document.getElementById("akurasi_ngram").value
+    var selisih_akurasi_ngram = document.getElementById("selisih_akurasi_ngram").value
+    const labels = ["Sesuai", "Tidak Sesuai"];
+    const ngram = [akurasi_ngram, selisih_akurasi_ngram];
+    const warna = [
+        "#2dce89",
+        "#f5365c",
+    ];
+
+    new Chart("ChartAkurasiNGRAM", {
+        type: "pie",
+        data: {
+            labels: labels,
+            datasets: [{
+                backgroundColor: warna,
+                data: ngram
             }]
         },
         options: {
